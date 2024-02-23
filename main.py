@@ -14,15 +14,14 @@ def main() -> int:
                "Configuración"]
     while True:
         match gui.show_menu(options):
-            case 1:
+            case 0:
                 return monthly.generate()
-            case 2:
+            case 1:
                 return quarterly.generate()
-            case 3:
+            case 2:
                 settings()
             case _:
                 return 1
-    # return monthly.generate()
 
 
 def settings():
