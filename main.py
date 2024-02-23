@@ -33,13 +33,11 @@ def main() -> int:
 def generate_monthly() -> int:
     # Welcome
     gui.show_message(title="Reportes mensuales",
-                     message="Se generarán de manera automática el cuadro mensual y el"
-                             "\nparte de asistencia, a partir del archivo que se puede descargar"
-                             "\ndesde Quintanet."
-                             "\nA continuación deberá cargar el archivo .xls obtenido en"
-                             "\nQuintanet. Es importante haber seleccionado las fechas"
-                             "\ncorrespondientes a un solo mes, y haber desmarcado la opción"
-                             "\n“Solo obligatorios”.",
+                     message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
+                             "del archivo que se puede descargar desde Quintanet.\n\n"
+                             "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
+                             "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
+                             "la opción “Solo obligatorios”.",
                      button_text="Cargar archivo")
 
     # Ask user for Excel file path
@@ -80,11 +78,10 @@ def generate_monthly() -> int:
         # Detect ROG, change it to REG
         if act[19:] == "ROG":
             gui.show_message(title="Alerta: ROG",
-                             message=f"Se detectó una ROG el {day} a las {time}."
-                                     f"\nEl reglamento de Compañía señala que todas las reuniones"
-                                     f"\ncitadas por el Directorio serán extraordinarias, por lo"
-                                     f"\nque se cambió automáticamente de “Reunión Ordinaria"
-                                     f"\nGeneral” a “Reunión a Extraordinaria”."
+                             message=f"Se detectó una ROG el {day} a las {time}.\n\n"
+                                     f"El reglamento de Compañía señala que todas las reuniones citadas por el "
+                                     f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
+                                     f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
                              )
             # TODO - Update DF
             ...
@@ -96,7 +93,7 @@ def generate_monthly() -> int:
                        "10-1-5", "10-1-6", "10-1-7", "10-1-8"]
             correct_act = gui.show_options(options, title="Alerta: 10-1",
                                            message=f"Se detectó un 10-1 el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad")
+                                                   f"Indique la subclasificación que corresponde.")
             # TODO - Update DF
             ...
 
@@ -105,7 +102,7 @@ def generate_monthly() -> int:
             options = ["10-6-1", "10-6-2", "10-6-3"]
             correct_act = gui.show_options(options, title="Alerta: 10-6",
                                            message=f"Se detectó un 10-6 el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad")
+                                                   f"Indique la subclasificación que corresponde.")
             # TODO - Update DF
             ...
 
@@ -114,7 +111,9 @@ def generate_monthly() -> int:
             options = ["FDoM", "FQ"]
             correct_act = gui.show_options(options, title="Alerta: Funeral",
                                            message=f"Se detectó un funeral el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad")
+                                                   f"Indique a que acto corresponde en realidad:\n"
+                                                   f" • Funeral de mártir o miembro del directorio"
+                                                   f" • Funeral de quintino")
             # TODO - Update DF
             ...
 
@@ -123,17 +122,17 @@ def generate_monthly() -> int:
             options = ["10-0-6", "10-17", "10-18"]
             correct_act = gui.show_options(options, title="Alerta: 10-7-3",
                                            message=f"Se detectó un 10-7-3 el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad")
+                                                   f"Indique a que acto corresponde en realidad.")
             if correct_act == "10-17":
                 options = ["10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
                            "10-17-5", "10-17-6", "10-17-7", "10-17-8"]
                 correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                               message="Indique la subclasificación que corresponda")
+                                               message="Indique la subclasificación que corresponde.")
             if correct_act == "10-18":
                 options = ["10-18-0", "10-18-1", "10-18-2", "10-18-3", "10-18-4",
                            "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
                 correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                               message="Indique la subclasificación que corresponda")
+                                               message="Indique la subclasificación que corresponde.")
             # TODO - Update DF
             ...
 
@@ -142,7 +141,9 @@ def generate_monthly() -> int:
             options = ["DE", "EJ-G"]
             correct_act = gui.show_options(options, title="Alerta: Delegación",
                                            message=f"Se detectó una delegación el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad")
+                                                   f"Indique a que acto corresponde en realidad:\n"
+                                                   f" • Delegación"
+                                                   f" • Ejercicio de guardia")
             # TODO - Update DF
             ...
     col_names = df.columns.tolist()
