@@ -9,6 +9,13 @@ import gui
 import openpyxl
 
 
+def generate() -> int:
+    to_return = 0
+    to_return += full_report()
+    to_return += simple_report()
+    return to_return
+
+
 def full_report() -> int:
     # Welcome
     gui.show_message(title="Reportes mensuales",
@@ -437,3 +444,8 @@ def full_report() -> int:
     os.remove(file)
 
     return 0
+
+
+def simple_report() -> int:
+    ...
+    return 55

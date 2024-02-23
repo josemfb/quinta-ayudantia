@@ -3,36 +3,26 @@
 import locale
 import sys
 
+import gui
+import quarterly
 import monthly
 
 
 def main() -> int:
-    # options = ["Reportes mensuales (cuadro y parte)",
-    #            "Reportes trimestrales (obligatorios y porcentajes)",
-    #            "Configuración"]
-    # while True:
-    #     match gui.menu(options):
-    #         case 1:
-    #             return generate_monthly()
-    #         case 2:
-    #             return generate_quarterly()
-    #         case 3:
-    #             settings()
-    #         case _:
-    #             return 1
-    return generate_monthly()
-
-
-def generate_monthly() -> int:
-    to_return = 0
-    to_return += monthly.full_report()
-
-    return to_return
-
-
-def generate_quarterly():
-    # TODO - Generate report with mandatory acts of the quarter
-    ...
+    options = ["Cuadro mensual y parte de asistencias",
+               "Cuadro de obligatorios trimestrales y porcentajes",
+               "Configuración"]
+    while True:
+        match gui.show_menu(options):
+            case 1:
+                return monthly.generate()
+            case 2:
+                return quarterly.generate()
+            case 3:
+                settings()
+            case _:
+                return 1
+    # return monthly.generate()
 
 
 def settings():
