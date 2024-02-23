@@ -34,7 +34,7 @@ def generate_monthly() -> int:
     # Welcome
     gui.show_message(title="Reportes mensuales",
                      message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
-                             "del archivo que se puede descargar desde Quintanet.\n\n"
+                             "del archivo que se puede descargar desde Quintanet.\n"
                              "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
                              "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
                              "la opción “Solo obligatorios”.",
@@ -78,7 +78,7 @@ def generate_monthly() -> int:
         # Detect ROG, change it to REG
         if act[19:] == "ROG":
             gui.show_message(title="Alerta: ROG",
-                             message=f"Se detectó una ROG el {day} a las {time}.\n\n"
+                             message=f"Se detectó una ROG el {day} a las {time}.\n"
                                      f"El reglamento de Compañía señala que todas las reuniones citadas por el "
                                      f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
                                      f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
@@ -112,7 +112,7 @@ def generate_monthly() -> int:
             correct_act = gui.show_options(options, title="Alerta: Funeral",
                                            message=f"Se detectó un funeral el {day} a las {time}.\n"
                                                    f"Indique a que acto corresponde en realidad:\n"
-                                                   f" • Funeral de mártir o miembro del directorio"
+                                                   f" • Funeral de mártir o miembro del directorio\n"
                                                    f" • Funeral de quintino")
             # TODO - Update DF
             ...
@@ -142,7 +142,7 @@ def generate_monthly() -> int:
             correct_act = gui.show_options(options, title="Alerta: Delegación",
                                            message=f"Se detectó una delegación el {day} a las {time}.\n"
                                                    f"Indique a que acto corresponde en realidad:\n"
-                                                   f" • Delegación"
+                                                   f" • Delegación\n"
                                                    f" • Ejercicio de guardia")
             # TODO - Update DF
             ...
