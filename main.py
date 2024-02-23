@@ -34,8 +34,6 @@ def settings():
     # TODO - Select last volunteer with 20 years of service
     ...
 
-    return 55
-
 
 if __name__ == "__main__":
     locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
