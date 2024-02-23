@@ -112,8 +112,8 @@ def generate_monthly() -> int:
             correct_act = gui.show_options(options, title="Alerta: Funeral",
                                            message=f"Se detectó un funeral el {day} a las {time}.\n"
                                                    f"Indique a que acto corresponde en realidad:\n"
-                                                   f" • Funeral de mártir o miembro del directorio\n"
-                                                   f" • Funeral de quintino")
+                                                   f"\t• Funeral de mártir o miembro del directorio\n"
+                                                   f"\t• Funeral de quintino")
             # TODO - Update DF
             ...
 
@@ -142,8 +142,8 @@ def generate_monthly() -> int:
             correct_act = gui.show_options(options, title="Alerta: Delegación",
                                            message=f"Se detectó una delegación el {day} a las {time}.\n"
                                                    f"Indique a que acto corresponde en realidad:\n"
-                                                   f" • Delegación\n"
-                                                   f" • Ejercicio de guardia")
+                                                   f"\t• Delegación\n"
+                                                   f"\t• Ejercicio de guardia")
             # TODO - Update DF
             ...
     col_names = df.columns.tolist()

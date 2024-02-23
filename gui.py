@@ -38,7 +38,7 @@ def show_message(title: str = "", message: str = "", button_text: str = "Continu
     image.grid(row=0, column=0, rowspan=4, ipadx=10, sticky="N")
     title.grid(row=1, column=1, ipady=10, sticky="S")
     text.grid(row=2, column=1, ipadx=10, sticky="NW")
-    button.grid(row=3, column=1, pady=10)
+    button.grid(row=3, column=1, padx=10, pady=10)
     blank = tk.Message(root, bg="white")
     blank.grid(row=0, column=1)
 
@@ -82,6 +82,47 @@ def show_options(options: list, title: str = "", message: str = "") -> str:
         pack_to = n // 5
         button.configure(command=lambda txt=button.cget("text"): button_click(txt))
         button.grid(row=pack_to, column=n % 5, padx=5, pady=5, sticky="N")
+
+    root.mainloop()
+    return to_return
+
+
+def show_menu(options: list, title: str = "", message: str = "") -> str:
+    # Create the root window
+    root = tk.Tk()
+    root.title(title)
+    root.configure(bg="white")
+    root.resizable(False, False)
+
+    logo = tk.PhotoImage(file=resource_path("logo.png"))
+    image = tk.Label(root, bg="white", image=logo)
+    text = tk.Message(root, bg="white", text=f"{message}", justify="left", font=("Vollkorn", 12),
+                      fg="#004000", width=500)
+    title = tk.Label(root, bg="white", text=f"Quinta Compañía «Bomba Arturo Prat»", justify="left",
+                     font=("Vollkorn SC", 12, "bold"), fg="#004000")
+
+    image.grid(row=0, column=0, rowspan=4, ipadx=10, sticky="N")
+    title.grid(row=1, column=1, ipady=10, sticky="S")
+    text.grid(row=2, column=1, ipadx=10, sticky="NW")
+
+    buttons = []
+    frame = tk.Frame(root)
+    frame.configure(bg="white")
+    frame.grid(row=3, column=1, padx=10, pady=10)
+
+    blank = tk.Message(root, bg="white")
+    blank.grid(row=0, column=1)
+
+    def button_click(opt: int):
+        global to_return
+        to_return = opt
+        root.destroy()
+
+    for i in range(len(options)):
+        buttons.append(tk.Button(frame, text=options[i], width=50, font=("Vollkorn", 10)))
+    for n, button in enumerate(buttons):
+        button.configure(command=lambda opt=n: button_click(opt))
+        button.grid(row=n, column=0, padx=5, pady=5, sticky="N")
 
     root.mainloop()
     return to_return
