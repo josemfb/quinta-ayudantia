@@ -1,5 +1,5 @@
 def generate() -> int:
-    return 0
+    return 55
 
 
 if __name__ == "__main__":

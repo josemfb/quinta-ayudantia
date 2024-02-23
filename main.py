@@ -26,9 +26,15 @@ def main() -> int:
 
 def settings():
     # TODO - Review and create new types of acts
+    ...
+
     # TODO - Select which acts are mandatory
+    ...
+
     # TODO - Select last volunteer with 20 years of service
     ...
+
+    return 55
 
 
 if __name__ == "__main__":
