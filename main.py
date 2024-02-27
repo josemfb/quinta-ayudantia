@@ -42,9 +42,8 @@ def settings():
                 # TODO - Review and create new types of acts
                 ...
             case 2:  # case 3:
-                msg = ("Automatizador de tareas de la ayudantía.\n"
-                       "Creado por José Fernández B.\n"
-                       "jose.fernandez@5.cbs.cl")
+                msg = ("Automatizador de tareas de la ayudantía.                                                     \n"
+                       "Creado por José Fernández B. (jose.fernandez@5.cbs.cl)")
                 gui.show_message(title="Acerca de", message=msg)
                 return 0
             case _:
