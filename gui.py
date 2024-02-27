@@ -42,6 +42,16 @@ def show_message(title: str = "", message: str = "", button_text: str = "Continu
     blank = tk.Message(root, bg="white")
     blank.grid(row=0, column=1)
 
+    root.attributes("-topmost", True)
+    root.update()
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+    w = root.winfo_width()
+    h = root.winfo_height()
+    x = (ws / 2) - (w / 2)
+    y = (hs / 2) - (h / 2) - 100
+    root.geometry("+%d+%d" % (x, y))
+
     root.mainloop()
 
 
@@ -83,6 +93,16 @@ def show_options(options: list, title: str = "", message: str = "") -> str:
         button.configure(command=lambda txt=button.cget("text"): button_click(txt))
         button.grid(row=pack_to, column=n % 5, padx=5, pady=5, sticky="N")
 
+    root.attributes("-topmost", True)
+    root.update()
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+    w = root.winfo_width()
+    h = root.winfo_height()
+    x = (ws / 2) - (w / 2)
+    y = (hs / 2) - (h / 2) - 100
+    root.geometry("+%d+%d" % (x, y))
+
     root.mainloop()
     return to_return
 
@@ -123,6 +143,16 @@ def show_menu(options: list, title: str = "", message: str = "") -> str:
     for n, button in enumerate(buttons):
         button.configure(command=lambda opt=n: button_click(opt))
         button.grid(row=n, column=0, padx=5, pady=5, sticky="N")
+
+    root.attributes("-topmost", True)
+    root.update()
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+    w = root.winfo_width()
+    h = root.winfo_height()
+    x = (ws / 2) - (w / 2)
+    y = (hs / 2) - (h / 2) - 100
+    root.geometry("+%d+%d" % (x, y))
 
     root.mainloop()
     return to_return
