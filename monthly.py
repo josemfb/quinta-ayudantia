@@ -1,15 +1,18 @@
 import datetime as dt
+import locale
 import os
 
+import openpyxl
 import openpyxl.styles
 import pandas as pd
 
 import config
 import gui
-import openpyxl
 
 
 def generate() -> int:
+    locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
+
     # Welcome
     gui.show_message(title="Reportes mensuales",
                      message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
@@ -49,8 +52,7 @@ def generate() -> int:
     col_names = df.columns.tolist()
 
     # Review acts
-    are_rog = False
-    for act in col_names:
+    for act in col_names[3:]:
         day = f"{int(act[0:2]):02d}/{int(act[3:5]):02d}"
         time = f"{int(act[12:14]):02d}:{int(act[15:17]):02d}"
 
@@ -62,9 +64,7 @@ def generate() -> int:
                                      f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
                                      f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
                              )
-            # TODO - Update DF
-            ...
-            are_rog = True
+            df.rename(columns={act: f"{act[:19]}REG"}, inplace=True)
 
         # Detect 10-1, ask for correct classification
         elif act[19:] == "10-1":
@@ -73,8 +73,7 @@ def generate() -> int:
             correct_act = gui.show_options(options, title="Alerta: 10-1",
                                            message=f"Se detectó un 10-1 el {day} a las {time}.\n"
                                                    f"Indique la subclasificación que corresponde.")
-            # TODO - Update DF
-            ...
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
         # Detect 10-6, ask for correct classification
         elif act[19:] == "10-6":
@@ -82,8 +81,7 @@ def generate() -> int:
             correct_act = gui.show_options(options, title="Alerta: 10-6",
                                            message=f"Se detectó un 10-6 el {day} a las {time}.\n"
                                                    f"Indique la subclasificación que corresponde.")
-            # TODO - Update DF
-            ...
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
         # Detect FDoM, ask if it's a FDoM or a FQ
         elif act[19:] == "FDoM":
@@ -93,8 +91,7 @@ def generate() -> int:
                                                    f"Indique a que acto corresponde en realidad:\n"
                                                    f"\t• Funeral de mártir o miembro del directorio\n"
                                                    f"\t• Funeral de quintino")
-            # TODO - Update DF
-            ...
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
         # Detect 10-17-3, ask if it's a 10-0-6, 10-17 or 10-18
         elif act[19:] == "10-7-3":
@@ -112,8 +109,7 @@ def generate() -> int:
                            "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
                 correct_act = gui.show_options(options, title="Alerta: 10-7-3",
                                                message="Indique la subclasificación que corresponde.")
-            # TODO - Update DF
-            ...
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
         # Detect DE, ask if it's a DE or EJ-G
         elif act[19:] == "DE":
@@ -123,8 +119,8 @@ def generate() -> int:
                                                    f"Indique a que acto corresponde en realidad:\n"
                                                    f"\t• Delegación\n"
                                                    f"\t• Ejercicio de guardia")
-            # TODO - Update DF
-            ...
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+
     col_names = df.columns.tolist()
 
     dates = ["", "", "Fecha"]
