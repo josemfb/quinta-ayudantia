@@ -11,7 +11,8 @@ import monthly
 def main() -> int:
     options = ["Cuadro mensual y parte de asistencias",
                "Cuadro de obligatorios trimestrales y porcentajes",
-               "Configuración"]
+               "Configuración",
+               "Salir"]
     while True:
         match gui.show_menu(options, title="Automatizador de la Ayudantía"):
             case 0:
@@ -20,7 +21,11 @@ def main() -> int:
                 gui.show_message(title="ERROR", message="Función aún no implementada")
                 return quarterly.generate()
             case 2:
-                return settings()
+                result = settings()
+                if result != 0:
+                    return result
+            case 3:
+                return 0
             case _:
                 return 1
 
@@ -28,8 +33,9 @@ def main() -> int:
 def settings():
     options = ["Revisar listado de actos obligatorios",
                "Modificar último voluntario con premio de 20",
-               "Crear nuevo tipo de acto"
-               "Acerca de este programa"]
+               "Crear nuevo tipo de acto",
+               "Acerca de este programa",
+               "Volver al menú principal"]
 
     while True:
         match gui.show_menu(options, title="Configuración"):
@@ -42,10 +48,12 @@ def settings():
             case 2:
                 # TODO - Review and create new types of acts
                 gui.show_message(title="ERROR", message="Función aún no implementada")
-            case 2:  # case 3:
+            case 3:
                 msg = ("Automatizador de tareas de la ayudantía.                                                     \n"
                        "Creado por José Fernández B. (jose.fernandez@5.cbs.cl)")
                 gui.show_message(title="Acerca de", message=msg)
+                return 0
+            case 4:
                 return 0
             case _:
                 return 1
