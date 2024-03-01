@@ -1,8 +1,9 @@
-import math
 import os
 import sys
 import tkinter as tk
+import datetime as dt
 from tkinter import filedialog as fd
+import tkcalendar as tkcal
 
 
 def resource_path(relative_path):
@@ -155,6 +156,92 @@ def show_menu(options: list, title: str = "", message: str = "") -> str:
     root.geometry("+%d+%d" % (x, y))
 
     root.mainloop()
+    return to_return
+
+
+def select_act(acts: list, title: str = "", message: str = "", button_text: str = "Continuar") -> str:
+    def button_click(date: str, act: str):
+        global to_return
+        if act == "No hay más actos con ABH":
+            empty_click()
+        to_return = f"{date}  {act}  {abh.get():02}"
+        if act == "No hay más actos con ABH":
+            to_return = False
+        root.destroy()
+
+    def empty_click():
+        global to_return
+        to_return = False
+        root.destroy()
+
+    def date_updated(event):
+        # Update acts displayed
+        options['menu'].delete(0, 'end')
+        date = calendar.get_date().strftime("%d/%m/%Y")
+        new_choices = ["No hay más actos con ABH"]
+        for possible_act in acts:
+            if possible_act[:10] == date:
+                new_choices.append(possible_act[12:])
+        for choice in new_choices:
+            options['menu'].add_command(label=choice, command=tk._setit(act, choice))
+
+    def act_selected(*args):
+        date = calendar.get_date().strftime("%d/%m/%Y")
+        if act.get() != "No hay más actos con ABH":
+            button.configure(command=lambda d=date, a=act.get(): button_click(d, a))
+
+    # Create the root window
+    root = tk.Tk()
+    root.title(title)
+    root.configure(bg="white")
+    root.resizable(False, False)
+
+    logo = tk.PhotoImage(file=resource_path("logo.png"))
+    image = tk.Label(root, bg="white", image=logo)
+    text = tk.Message(root, bg="white", text=f"{message}", justify="left", font=("Vollkorn", 12),
+                      fg="#004000", width=500)
+    title = tk.Label(root, bg="white", text=f"Quinta Compañía «Bomba Arturo Prat»", justify="left",
+                     font=("Vollkorn SC", 12, "bold"), fg="#004000")
+    today = dt.date.today()
+    calendar = tkcal.DateEntry(root, firstweekday="monday", locale="es_CL", date_pattern="dd/mm/yyyy",
+                                    font=("Vollkorn SC", 10), month=int(today.strftime("%m")) - 1)
+    act = tk.StringVar(root)
+    act.set("No hay más actos con ABH")
+    # TODO: start with acts displayed for the 1st of the month
+    options = tk.OptionMenu(root, act, act.get())
+    abh = tk.StringVar(root)
+    abh.set("0")
+    bonus = tk.Spinbox(root, from_=0, to=99, textvariable=abh, width=5, justify=tk.RIGHT, font=("Vollkorn", 10))
+    button = tk.Button(root, text=button_text, command=root.destroy, font=("Vollkorn", 10))
+    label = tk.Label(root, text="ABH", bg="white", font=("Vollkorn", 10))
+
+    image.grid(row=0, column=0, rowspan=4, ipadx=10, sticky="N")
+    title.grid(row=1, column=1, columnspan=2, ipady=10, sticky="S")
+    text.grid(row=2, column=1, columnspan=2, ipadx=10, sticky="NW")
+    calendar.grid(row=3, column=1, columnspan=2, ipady=5)
+    options.grid(row=4, column=1, columnspan=2, ipady=5, pady=10)
+    bonus.grid(row=5, column=1, ipady=5, pady=10, sticky="E")
+    label.grid(row=5, column=2, ipady=5, pady=10, sticky="W")
+    button.grid(row=6, column=1, columnspan=2, padx=10, pady=10)
+    blank = tk.Message(root, bg="white")
+    blank.grid(row=0, column=1, columnspan=2)
+
+    button.configure(command=empty_click)
+    calendar.bind("<<DateEntrySelected>>", date_updated)
+    act.trace("w", act_selected)
+
+    root.attributes("-topmost", True)
+    root.update()
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+    w = root.winfo_width()
+    h = root.winfo_height()
+    x = (ws / 2) - (w / 2)
+    y = (hs / 2) - (h / 2) - 100
+    root.geometry("+%d+%d" % (x, y))
+
+    root.mainloop()
+
     return to_return
 
 

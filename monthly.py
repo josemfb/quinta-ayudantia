@@ -132,6 +132,18 @@ def generate() -> int:
         hours.append(dt.time(int(col[12:14]), int(col[15:17])).strftime("%H:%M"))
         acts.append(col[19:])
         bonus.append("")
+
+    # Ask for bonus lists
+    act_with_bonus = True
+    while act_with_bonus:
+        act_with_bonus = gui.select_act(col_names[3:], title="Abono por horas",
+                                        message="Selecciona un acto con abono por horas",
+                                        button_text="Seleccionar")
+        if not act_with_bonus:
+            break
+        index = col_names[3:].index(act_with_bonus[:-4]) + 3
+        bonus[index] = int(act_with_bonus[-2:])
+
     dates_dict = {col_names[i]: [dates[i]] for i in range(len(col_names))}
     dates_df = pd.DataFrame(dates_dict)
     hours_dict = {col_names[i]: [hours[i]] for i in range(len(col_names))}
@@ -141,9 +153,6 @@ def generate() -> int:
     bonus_dict = {col_names[i]: [bonus[i]] for i in range(len(col_names))}
     bonus_df = pd.DataFrame(bonus_dict)
     df = pd.concat([dates_df, hours_df, acts_df, bonus_df, df])
-
-    # TODO - Ask about act length bonus
-    ...
 
     seniority_20 = df[df["Voluntario"] == config.last_with_20]["Ant."].values[0]
     df["Ant."] = pd.to_numeric(df["Ant."])
@@ -210,7 +219,7 @@ def generate() -> int:
         if item == "":
             abh[n] = 1
         else:
-            abh[n] = int(abh[n])
+            abh[n] = int(abh[n])+1
 
     sum_dept_mandatory = 0
     sum_comp_mandatory = 0
