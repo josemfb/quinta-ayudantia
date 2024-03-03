@@ -15,3 +15,4 @@ mandatory_for_honoraries = ["REG", "ROG", "ROC", "REC",
                             "COMP-GEN", "COMP-INT",
                             "EP",
                             "RC", "FQ", "FDoM"]
+captain_name = "Ramón Rodríguez M."
