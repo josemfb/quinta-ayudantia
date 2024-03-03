@@ -4,6 +4,8 @@ import os
 
 import openpyxl
 import openpyxl.styles
+import openpyxl.worksheet.pagebreak as pagebreak
+import openpyxl.worksheet.properties as properties
 import pandas as pd
 
 import config
@@ -11,16 +13,21 @@ import gui
 
 
 def generate() -> int:
+
+    # TODO: Add comments
+
     locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
 
     # Welcome
-    gui.show_message(title="Reportes mensuales",
-                     message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
-                             "del archivo que se puede descargar desde Quintanet.\n"
-                             "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
-                             "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
-                             "la opción “Solo obligatorios”.",
-                     button_text="Cargar archivo")
+    # TODO: Remove if for production
+    if __name__ != "__main__":
+        gui.show_message(title="Reportes mensuales",
+                         message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
+                                 "del archivo que se puede descargar desde Quintanet.\n"
+                                 "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
+                                 "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
+                                 "la opción “Solo obligatorios”.",
+                         button_text="Cargar archivo")
 
     # Ask user for Excel file path
     # Defaults to excel.html
@@ -52,74 +59,76 @@ def generate() -> int:
     col_names = df.columns.tolist()
 
     # Review acts
-    for act in col_names[3:]:
-        day = f"{int(act[0:2]):02d}/{int(act[3:5]):02d}"
-        time = f"{int(act[12:14]):02d}:{int(act[15:17]):02d}"
+    # TODO: Remove if for production
+    if __name__ != "__main__":
+        for act in col_names[3:]:
+            day = f"{int(act[0:2]):02d}/{int(act[3:5]):02d}"
+            time = f"{int(act[12:14]):02d}:{int(act[15:17]):02d}"
 
-        # Detect ROG, change it to REG
-        if act[19:] == "ROG":
-            gui.show_message(title="Alerta: ROG",
-                             message=f"Se detectó una ROG el {day} a las {time}.\n"
-                                     f"El reglamento de Compañía señala que todas las reuniones citadas por el "
-                                     f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
-                                     f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
-                             )
-            df.rename(columns={act: f"{act[:19]}REG"}, inplace=True)
+            # Detect ROG, change it to REG
+            if act[19:] == "ROG":
+                gui.show_message(title="Alerta: ROG",
+                                 message=f"Se detectó una ROG el {day} a las {time}.\n"
+                                         f"El reglamento de Compañía señala que todas las reuniones citadas por el "
+                                         f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
+                                         f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
+                                 )
+                df.rename(columns={act: f"{act[:19]}REG"}, inplace=True)
 
-        # Detect 10-1, ask for correct classification
-        elif act[19:] == "10-1":
-            options = ["10-1-1", "10-1-2", "10-1-3", "10-1-4",
-                       "10-1-5", "10-1-6", "10-1-7", "10-1-8"]
-            correct_act = gui.show_options(options, title="Alerta: 10-1",
-                                           message=f"Se detectó un 10-1 el {day} a las {time}.\n"
-                                                   f"Indique la subclasificación que corresponde.")
-            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+            # Detect 10-1, ask for correct classification
+            elif act[19:] == "10-1":
+                options = ["10-1-1", "10-1-2", "10-1-3", "10-1-4",
+                           "10-1-5", "10-1-6", "10-1-7", "10-1-8"]
+                correct_act = gui.show_options(options, title="Alerta: 10-1",
+                                               message=f"Se detectó un 10-1 el {day} a las {time}.\n"
+                                                       f"Indique la subclasificación que corresponde.")
+                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-        # Detect 10-6, ask for correct classification
-        elif act[19:] == "10-6":
-            options = ["10-6-1", "10-6-2", "10-6-3"]
-            correct_act = gui.show_options(options, title="Alerta: 10-6",
-                                           message=f"Se detectó un 10-6 el {day} a las {time}.\n"
-                                                   f"Indique la subclasificación que corresponde.")
-            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+            # Detect 10-6, ask for correct classification
+            elif act[19:] == "10-6":
+                options = ["10-6-1", "10-6-2", "10-6-3"]
+                correct_act = gui.show_options(options, title="Alerta: 10-6",
+                                               message=f"Se detectó un 10-6 el {day} a las {time}.\n"
+                                                       f"Indique la subclasificación que corresponde.")
+                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-        # Detect FDoM, ask if it's a FDoM or a FQ
-        elif act[19:] == "FDoM":
-            options = ["FDoM", "FQ"]
-            correct_act = gui.show_options(options, title="Alerta: Funeral",
-                                           message=f"Se detectó un funeral el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad:\n"
-                                                   f"\t• Funeral de mártir o miembro del directorio\n"
-                                                   f"\t• Funeral de quintino")
-            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+            # Detect FDoM, ask if it's a FDoM or a FQ
+            elif act[19:] == "FDoM":
+                options = ["FDoM", "FQ"]
+                correct_act = gui.show_options(options, title="Alerta: Funeral",
+                                               message=f"Se detectó un funeral el {day} a las {time}.\n"
+                                                       f"Indique a que acto corresponde en realidad:\n"
+                                                       f"\t• Funeral de mártir o miembro del directorio\n"
+                                                       f"\t• Funeral de quintino")
+                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-        # Detect 10-17-3, ask if it's a 10-0-6, 10-17 or 10-18
-        elif act[19:] == "10-7-3":
-            options = ["10-0-6", "10-17", "10-18"]
-            correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                           message=f"Se detectó un 10-7-3 el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad.")
-            if correct_act == "10-17":
-                options = ["10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
-                           "10-17-5", "10-17-6", "10-17-7", "10-17-8"]
+            # Detect 10-17-3, ask if it's a 10-0-6, 10-17 or 10-18
+            elif act[19:] == "10-7-3":
+                options = ["10-0-6", "10-17", "10-18"]
                 correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                               message="Indique la subclasificación que corresponde.")
-            if correct_act == "10-18":
-                options = ["10-18-0", "10-18-1", "10-18-2", "10-18-3", "10-18-4",
-                           "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
-                correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                               message="Indique la subclasificación que corresponde.")
-            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+                                               message=f"Se detectó un 10-7-3 el {day} a las {time}.\n"
+                                                       f"Indique a que acto corresponde en realidad.")
+                if correct_act == "10-17":
+                    options = ["10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
+                               "10-17-5", "10-17-6", "10-17-7", "10-17-8"]
+                    correct_act = gui.show_options(options, title="Alerta: 10-7-3",
+                                                   message="Indique la subclasificación que corresponde.")
+                if correct_act == "10-18":
+                    options = ["10-18-0", "10-18-1", "10-18-2", "10-18-3", "10-18-4",
+                               "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
+                    correct_act = gui.show_options(options, title="Alerta: 10-7-3",
+                                                   message="Indique la subclasificación que corresponde.")
+                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-        # Detect DE, ask if it's a DE or EJ-G
-        elif act[19:] == "DE":
-            options = ["DE", "EJ-G"]
-            correct_act = gui.show_options(options, title="Alerta: Delegación",
-                                           message=f"Se detectó una delegación el {day} a las {time}.\n"
-                                                   f"Indique a que acto corresponde en realidad:\n"
-                                                   f"\t• Delegación\n"
-                                                   f"\t• Ejercicio de guardia")
-            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+            # Detect DE, ask if it's a DE or EJ-G
+            elif act[19:] == "DE":
+                options = ["DE", "EJ-G"]
+                correct_act = gui.show_options(options, title="Alerta: Delegación",
+                                               message=f"Se detectó una delegación el {day} a las {time}.\n"
+                                                       f"Indique a que acto corresponde en realidad:\n"
+                                                       f"\t• Delegación\n"
+                                                       f"\t• Ejercicio de guardia")
+                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
     col_names = df.columns.tolist()
 
@@ -133,16 +142,18 @@ def generate() -> int:
         acts.append(col[19:])
         bonus.append("")
 
-    # Ask for bonus lists
-    act_with_bonus = True
-    while act_with_bonus:
-        act_with_bonus = gui.select_act(col_names[3:], title="Abono por horas",
-                                        message="Selecciona un acto con abono por horas",
-                                        button_text="Seleccionar")
-        if not act_with_bonus:
-            break
-        index = col_names[3:].index(act_with_bonus[:-4]) + 3
-        bonus[index] = int(act_with_bonus[-2:])
+    # TODO: Remove if for production
+    if __name__ != "__main__":
+        # Ask for bonus lists
+        act_with_bonus = True
+        while act_with_bonus:
+            act_with_bonus = gui.select_act(col_names[3:], title="Abono por horas",
+                                            message="Selecciona un acto con abono por horas",
+                                            button_text="Seleccionar")
+            if not act_with_bonus:
+                break
+            index = col_names[3:].index(act_with_bonus[:-4]) + 3
+            bonus[index] = int(act_with_bonus[-2:])
 
     dates_dict = {col_names[i]: [dates[i]] for i in range(len(col_names))}
     dates_df = pd.DataFrame(dates_dict)
@@ -432,11 +443,120 @@ def generate() -> int:
     # Save formatted excel
     ws.freeze_panes = ws["D5"]
     wb.save(name)
+    wb.close()
 
-    # TODO - Export excel: simple report
-    ...
-    # TODO - Format and color code simple report
-    ...
+    # Create new workbook for simple report
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # TODO: Set white background and vertical center alignment
+    for l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]:
+        for n in range(196):
+            ws[f"{l}{n+1}"].fill = openpyxl.styles.PatternFill("solid", fgColor="FFFFFF")
+            ws[f"{l}{n+1}"].alignment = openpyxl.styles.Alignment(vertical="center")
+
+    # Set columns width
+    ws.column_dimensions["A"].width = 7
+    ws.column_dimensions["B"].width = 5
+    ws.column_dimensions["C"].width = 38
+    ws.column_dimensions["D"].width = 5
+    ws.column_dimensions["E"].width = 5
+    ws.column_dimensions["F"].width = 5
+    ws.column_dimensions["G"].width = 5
+    ws.column_dimensions["H"].width = 5
+    ws.column_dimensions["I"].width = 7
+    ws.column_dimensions["J"].width = 5
+    ws.column_dimensions["K"].width = 38
+    ws.column_dimensions["L"].width = 5
+    ws.column_dimensions["M"].width = 5
+    ws.column_dimensions["N"].width = 5
+    ws.column_dimensions["O"].width = 5
+    ws.column_dimensions["P"].width = 5
+    ws.column_dimensions["Q"].width = 7
+
+    # Add titles
+    ws["I4"] = "Parte mensual de asistencia"
+    ws["I102"] = "Resumen de actos"
+    ws["I5"] = month
+    ws["I103"] = month
+    for cell in ["I4", "I5", "I102", "I103"]:
+        ws[cell].font = openpyxl.styles.Font(bold=True)
+        ws[cell].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+
+    # Add company number
+    border_thick = openpyxl.styles.Side(border_style="thick", color="000000")
+    ws.merge_cells("L3:P3")
+    ws.merge_cells("L4:P5")
+    ws["L3"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
+    ws["M3"].border = openpyxl.styles.Border(top=border_thick)
+    ws["N3"].border = openpyxl.styles.Border(top=border_thick)
+    ws["O3"].border = openpyxl.styles.Border(top=border_thick)
+    ws["P3"].border = openpyxl.styles.Border(top=border_thick, right=border_thick)
+    ws["L4"].border = openpyxl.styles.Border(left=border_thick)
+    ws["P4"].border = openpyxl.styles.Border(right=border_thick)
+    ws["L5"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
+    ws["M5"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["N5"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["O5"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["P5"].border = openpyxl.styles.Border(bottom=border_thick, right=border_thick)
+    ws["L3"] = "Compañía"
+    ws["L4"] = "5.ª"
+    ws["L3"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L4"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L3"].font = openpyxl.styles.Font(bold=True)
+    ws["L4"].font = openpyxl.styles.Font(size="22", bold=True)
+    ws.merge_cells("L101:P101")
+    ws.merge_cells("L102:P103")
+    ws["L101"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
+    ws["M101"].border = openpyxl.styles.Border(top=border_thick)
+    ws["N101"].border = openpyxl.styles.Border(top=border_thick)
+    ws["O101"].border = openpyxl.styles.Border(top=border_thick)
+    ws["P101"].border = openpyxl.styles.Border(top=border_thick, right=border_thick)
+    ws["L102"].border = openpyxl.styles.Border(left=border_thick)
+    ws["P102"].border = openpyxl.styles.Border(right=border_thick)
+    ws["L103"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
+    ws["M103"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["N103"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["O103"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["P103"].border = openpyxl.styles.Border(bottom=border_thick, right=border_thick)
+    ws["L101"] = "Compañía"
+    ws["L102"] = "5.ª"
+    ws["L101"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L102"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L101"].font = openpyxl.styles.Font(bold=True)
+    ws["L102"].font = openpyxl.styles.Font(size="22", bold=True)
+
+    # TODO: Add logos
+
+    # TODO: signature
+
+    # TODO: Create blank tables and color them
+
+    # TODO: Add names
+
+    # TODO: Add headers
+
+    # TODO: Color headers and lines
+
+    # TODO: Add assistance
+
+    # TODO: Add act counts
+
+    # TODO: Add act detail
+
+    # Add page breaks
+    ws.pageSetUpPr = properties.PageSetupProperties(fitToPage=False, autoPageBreaks=False)
+    ws.print_area = "A1:Q196"
+    ws.row_breaks.append(pagebreak.Break(98))
+    ws.row_breaks.append(pagebreak.Break(196))
+    ws.col_breaks.append(pagebreak.Break(17))
+
+    # TODO: Remove auto page breaks
+
+    # Save simple report
+    name = f"Parte{name[6:]}"
+    wb.save(name)
+    wb.close()
 
     # Remove original file after finishing
     os.remove(file)
