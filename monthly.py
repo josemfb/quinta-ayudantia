@@ -20,15 +20,13 @@ def generate() -> int:
     locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
 
     # Welcome
-    # TODO: Remove if for production
-    if __name__ != "__main__":
-        gui.show_message(title="Reportes mensuales",
-                         message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
-                                 "del archivo que se puede descargar desde Quintanet.\n"
-                                 "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
-                                 "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
-                                 "la opción “Solo obligatorios”.",
-                         button_text="Cargar archivo")
+    gui.show_message(title="Reportes mensuales",
+                     message="Se generarán de manera automática el cuadro mensual y el parte de asistencia, a partir "
+                             "del archivo que se puede descargar desde Quintanet.\n"
+                             "A continuación deberá cargar el archivo .xls obtenido en Quintanet. Es importante "
+                             "haber seleccionado las fechas correspondientes a un solo mes, y haber desmarcado "
+                             "la opción “Solo obligatorios”.",
+                     button_text="Cargar archivo")
 
     # Ask user for Excel file path
     # Defaults to excel.html
@@ -60,76 +58,74 @@ def generate() -> int:
     col_names = df.columns.tolist()
 
     # Review acts
-    # TODO: Remove if for production
-    if __name__ != "__main__":
-        for act in col_names[3:]:
-            day = f"{int(act[0:2]):02d}/{int(act[3:5]):02d}"
-            time = f"{int(act[12:14]):02d}:{int(act[15:17]):02d}"
+    for act in col_names[3:]:
+        day = f"{int(act[0:2]):02d}/{int(act[3:5]):02d}"
+        time = f"{int(act[12:14]):02d}:{int(act[15:17]):02d}"
 
-            # Detect ROG, change it to REG
-            if act[19:] == "ROG":
-                gui.show_message(title="Alerta: ROG",
-                                 message=f"Se detectó una ROG el {day} a las {time}.\n"
-                                         f"El reglamento de Compañía señala que todas las reuniones citadas por el "
-                                         f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
-                                         f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
-                                 )
-                df.rename(columns={act: f"{act[:19]}REG"}, inplace=True)
+        # Detect ROG, change it to REG
+        if act[19:] == "ROG":
+            gui.show_message(title="Alerta: ROG",
+                             message=f"Se detectó una ROG el {day} a las {time}.\n"
+                                     f"El reglamento de Compañía señala que todas las reuniones citadas por el "
+                                     f"Directorio serán extraordinarias, por lo que se cambió automáticamente "
+                                     f"la “Reunión Ordinaria General” a “Reunión a Extraordinaria”."
+                             )
+            df.rename(columns={act: f"{act[:19]}REG"}, inplace=True)
 
-            # Detect 10-1, ask for correct classification
-            elif act[19:] == "10-1":
-                options = ["10-1-1", "10-1-2", "10-1-3", "10-1-4",
-                           "10-1-5", "10-1-6", "10-1-7", "10-1-8"]
-                correct_act = gui.show_options(options, title="Alerta: 10-1",
-                                               message=f"Se detectó un 10-1 el {day} a las {time}.\n"
-                                                       f"Indique la subclasificación que corresponde.")
-                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+        # Detect 10-1, ask for correct classification
+        elif act[19:] == "10-1":
+            options = ["10-1-1", "10-1-2", "10-1-3", "10-1-4",
+                       "10-1-5", "10-1-6", "10-1-7", "10-1-8"]
+            correct_act = gui.show_options(options, title="Alerta: 10-1",
+                                           message=f"Se detectó un 10-1 el {day} a las {time}.\n"
+                                                   f"Indique la subclasificación que corresponde.")
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-            # Detect 10-6, ask for correct classification
-            elif act[19:] == "10-6":
-                options = ["10-6-1", "10-6-2", "10-6-3"]
-                correct_act = gui.show_options(options, title="Alerta: 10-6",
-                                               message=f"Se detectó un 10-6 el {day} a las {time}.\n"
-                                                       f"Indique la subclasificación que corresponde.")
-                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+        # Detect 10-6, ask for correct classification
+        elif act[19:] == "10-6":
+            options = ["10-6-1", "10-6-2", "10-6-3"]
+            correct_act = gui.show_options(options, title="Alerta: 10-6",
+                                           message=f"Se detectó un 10-6 el {day} a las {time}.\n"
+                                                   f"Indique la subclasificación que corresponde.")
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-            # Detect FDoM, ask if it's a FDoM or a FQ
-            elif act[19:] == "FDoM":
-                options = ["FDoM", "FQ"]
-                correct_act = gui.show_options(options, title="Alerta: Funeral",
-                                               message=f"Se detectó un funeral el {day} a las {time}.\n"
-                                                       f"Indique a que acto corresponde en realidad:\n"
-                                                       f"\t• Funeral de mártir o miembro del directorio\n"
-                                                       f"\t• Funeral de quintino")
-                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+        # Detect FDoM, ask if it's a FDoM or a FQ
+        elif act[19:] == "FDoM":
+            options = ["FDoM", "FQ"]
+            correct_act = gui.show_options(options, title="Alerta: Funeral",
+                                           message=f"Se detectó un funeral el {day} a las {time}.\n"
+                                                   f"Indique a que acto corresponde en realidad:\n"
+                                                   f"\t• Funeral de mártir o miembro del directorio\n"
+                                                   f"\t• Funeral de quintino")
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-            # Detect 10-17-3, ask if it's a 10-0-6, 10-17 or 10-18
-            elif act[19:] == "10-7-3":
-                options = ["10-0-6", "10-17", "10-18"]
+        # Detect 10-17-3, ask if it's a 10-0-6, 10-17 or 10-18
+        elif act[19:] == "10-7-3":
+            options = ["10-0-6", "10-17", "10-18"]
+            correct_act = gui.show_options(options, title="Alerta: 10-7-3",
+                                           message=f"Se detectó un 10-7-3 el {day} a las {time}.\n"
+                                                   f"Indique a que acto corresponde en realidad.")
+            if correct_act == "10-17":
+                options = ["10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
+                           "10-17-5", "10-17-6", "10-17-7", "10-17-8"]
                 correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                               message=f"Se detectó un 10-7-3 el {day} a las {time}.\n"
-                                                       f"Indique a que acto corresponde en realidad.")
-                if correct_act == "10-17":
-                    options = ["10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
-                               "10-17-5", "10-17-6", "10-17-7", "10-17-8"]
-                    correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                                   message="Indique la subclasificación que corresponde.")
-                if correct_act == "10-18":
-                    options = ["10-18-0", "10-18-1", "10-18-2", "10-18-3", "10-18-4",
-                               "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
-                    correct_act = gui.show_options(options, title="Alerta: 10-7-3",
-                                                   message="Indique la subclasificación que corresponde.")
-                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+                                               message="Indique la subclasificación que corresponde.")
+            if correct_act == "10-18":
+                options = ["10-18-0", "10-18-1", "10-18-2", "10-18-3", "10-18-4",
+                           "10-18-5", "10-18-6", "10-18-7", "10-18-8"]
+                correct_act = gui.show_options(options, title="Alerta: 10-7-3",
+                                               message="Indique la subclasificación que corresponde.")
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
-            # Detect DE, ask if it's a DE or EJ-G
-            elif act[19:] == "DE":
-                options = ["DE", "EJ-G"]
-                correct_act = gui.show_options(options, title="Alerta: Delegación",
-                                               message=f"Se detectó una delegación el {day} a las {time}.\n"
-                                                       f"Indique a que acto corresponde en realidad:\n"
-                                                       f"\t• Delegación\n"
-                                                       f"\t• Ejercicio de guardia")
-                df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
+        # Detect DE, ask if it's a DE or EJ-G
+        elif act[19:] == "DE":
+            options = ["DE", "EJ-G"]
+            correct_act = gui.show_options(options, title="Alerta: Delegación",
+                                           message=f"Se detectó una delegación el {day} a las {time}.\n"
+                                                   f"Indique a que acto corresponde en realidad:\n"
+                                                   f"\t• Delegación\n"
+                                                   f"\t• Ejercicio de guardia")
+            df.rename(columns={act: f"{act[:19]}{correct_act}"}, inplace=True)
 
     col_names = df.columns.tolist()
 
@@ -143,18 +139,16 @@ def generate() -> int:
         acts.append(col[19:])
         bonus.append("")
 
-    # TODO: Remove if for production
-    if __name__ != "__main__":
-        # Ask for bonus lists
-        act_with_bonus = True
-        while act_with_bonus:
-            act_with_bonus = gui.select_act(col_names[3:], title="Abono por horas",
-                                            message="Selecciona un acto con abono por horas",
-                                            button_text="Seleccionar")
-            if not act_with_bonus:
-                break
-            index = col_names[3:].index(act_with_bonus[:-4]) + 3
-            bonus[index] = int(act_with_bonus[-2:])
+    # Ask for bonus lists
+    act_with_bonus = True
+    while act_with_bonus:
+        act_with_bonus = gui.select_act(col_names[3:], title="Abono por horas",
+                                        message="Selecciona un acto con abono por horas",
+                                        button_text="Seleccionar")
+        if not act_with_bonus:
+            break
+        index = col_names[3:].index(act_with_bonus[:-4]) + 3
+        bonus[index] = int(act_with_bonus[-2:])
 
     dates_dict = {col_names[i]: [dates[i]] for i in range(len(col_names))}
     dates_df = pd.DataFrame(dates_dict)
