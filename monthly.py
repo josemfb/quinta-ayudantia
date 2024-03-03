@@ -451,7 +451,7 @@ def generate() -> int:
 
     # TODO: Set white background and vertical center alignment
     for l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]:
-        for n in range(196):
+        for n in range(200):
             ws[f"{l}{n+1}"].fill = openpyxl.styles.PatternFill("solid", fgColor="FFFFFF")
             ws[f"{l}{n+1}"].alignment = openpyxl.styles.Alignment(vertical="center")
 
@@ -476,10 +476,10 @@ def generate() -> int:
 
     # Add titles
     ws["I4"] = "Parte mensual de asistencia"
-    ws["I102"] = "Resumen de actos"
+    ws["I104"] = "Resumen de actos"
     ws["I5"] = month
-    ws["I103"] = month
-    for cell in ["I4", "I5", "I102", "I103"]:
+    ws["I105"] = month
+    for cell in ["I4", "I5", "I104", "I105"]:
         ws[cell].font = openpyxl.styles.Font(bold=True)
         ws[cell].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
 
@@ -505,26 +505,26 @@ def generate() -> int:
     ws["L4"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
     ws["L3"].font = openpyxl.styles.Font(bold=True)
     ws["L4"].font = openpyxl.styles.Font(size="22", bold=True)
-    ws.merge_cells("L101:P101")
-    ws.merge_cells("L102:P103")
-    ws["L101"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
-    ws["M101"].border = openpyxl.styles.Border(top=border_thick)
-    ws["N101"].border = openpyxl.styles.Border(top=border_thick)
-    ws["O101"].border = openpyxl.styles.Border(top=border_thick)
-    ws["P101"].border = openpyxl.styles.Border(top=border_thick, right=border_thick)
-    ws["L102"].border = openpyxl.styles.Border(left=border_thick)
-    ws["P102"].border = openpyxl.styles.Border(right=border_thick)
-    ws["L103"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
-    ws["M103"].border = openpyxl.styles.Border(bottom=border_thick)
-    ws["N103"].border = openpyxl.styles.Border(bottom=border_thick)
-    ws["O103"].border = openpyxl.styles.Border(bottom=border_thick)
-    ws["P103"].border = openpyxl.styles.Border(bottom=border_thick, right=border_thick)
-    ws["L101"] = "Compañía"
-    ws["L102"] = "5.ª"
-    ws["L101"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
-    ws["L102"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
-    ws["L101"].font = openpyxl.styles.Font(bold=True)
-    ws["L102"].font = openpyxl.styles.Font(size="22", bold=True)
+    ws.merge_cells("L103:P103")
+    ws.merge_cells("L104:P105")
+    ws["L103"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
+    ws["M103"].border = openpyxl.styles.Border(top=border_thick)
+    ws["N103"].border = openpyxl.styles.Border(top=border_thick)
+    ws["O103"].border = openpyxl.styles.Border(top=border_thick)
+    ws["P103"].border = openpyxl.styles.Border(top=border_thick, right=border_thick)
+    ws["L104"].border = openpyxl.styles.Border(left=border_thick)
+    ws["P104"].border = openpyxl.styles.Border(right=border_thick)
+    ws["L105"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
+    ws["M105"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["N105"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["O105"].border = openpyxl.styles.Border(bottom=border_thick)
+    ws["P105"].border = openpyxl.styles.Border(bottom=border_thick, right=border_thick)
+    ws["L103"] = "Compañía"
+    ws["L104"] = "5.ª"
+    ws["L103"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L104"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    ws["L103"].font = openpyxl.styles.Font(bold=True)
+    ws["L104"].font = openpyxl.styles.Font(size="22", bold=True)
 
     # TODO: Add logos
 
@@ -546,9 +546,9 @@ def generate() -> int:
 
     # Add page breaks
     ws.pageSetUpPr = properties.PageSetupProperties(fitToPage=False, autoPageBreaks=False)
-    ws.print_area = "A1:Q196"
-    ws.row_breaks.append(pagebreak.Break(98))
-    ws.row_breaks.append(pagebreak.Break(196))
+    ws.print_area = "A1:Q200"
+    ws.row_breaks.append(pagebreak.Break(100))
+    ws.row_breaks.append(pagebreak.Break(200))
     ws.col_breaks.append(pagebreak.Break(17))
 
     # TODO: Remove auto page breaks
