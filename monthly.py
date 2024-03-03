@@ -610,17 +610,17 @@ def generate() -> int:
     ws["B116"].font = openpyxl.styles.Font(bold=True)
     ws["B127"].font = openpyxl.styles.Font(bold=True)
     ws["B108"] = "Citaciones del Directorio"
-    ws["B109"] = "Funerales"
-    ws["B110"] = "Romerías"
+    ws["B109"] = "Funerales de Cuerpo"
+    ws["B110"] = "Romerías de Cuerpo"
     ws["B111"] = "Competencia general"
     ws["B112"] = "Ejercicio general"
     ws["B117"] = "Incendios"
     ws["B118"] = "Ejercicios"
     ws["B119"] = "Academias"
-    ws["B120"] = "Reuniones"
-    ws["B121"] = "Funerales"
+    ws["B120"] = "Sesiones de Compañía"
+    ws["B121"] = "Funerales de Compañía"
     ws["B122"] = "Competencia interna"
-    ws["B123"] = "Romerías"
+    ws["B123"] = "Romerías de Compañía"
     ws["B128"] = "Llamados de Comandancia"
     ws["B131"] = "Rescates"
     ws["B133"] = "Apoyo a otros cuerpos"
@@ -849,9 +849,150 @@ def generate() -> int:
     ws[f"P8"].border = openpyxl.styles.Border(right=border_thick)
     ws[f"P9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
 
-    # TODO: Add act counts
-
-    # TODO: Add act detail
+    # Add acts details
+    act_numbers = {}
+    act_dates = {}
+    for act in ["Citaciones del Directorio", "Funerales de Cuerpo", "Romerías de Cuerpo", "Competencia general",
+                "Ejercicio general", "Incendios", "Ejercicios", "Academias", "Sesiones de Compañía",
+                "Funerales de Compañía", "Competencia interna", "Romerías de Compañía", "Llamados de Comandancia",
+                "Rescates", "Apoyo a otros cuerpos", "Junta de Oficiales", "Consejo de Disciplina",
+                "Otros servicios", "Acuartelamiento", "Incendios de reserva", "Delegaciones",
+                "Ejercicios de guardia", "Revisión de cuarteles", "Clave 0-11"]:
+        act_numbers[act] = 0
+        act_dates[act] = ""
+    for act in col_names[3:]:
+        if act[19:] in ["EP", "REG"]:
+            act_numbers["Citaciones del Directorio"] += 1
+            act_dates["Citaciones del Directorio"] += str(int(act[:2])) + ", "
+        if act[19:] in ["FDoM", "FU"]:
+            act_numbers["Funerales de Cuerpo"] += 1
+            act_dates["Funerales de Cuerpo"] += str(int(act[:2])) + ", "
+        if act[19:] in ["RG"]:
+            act_numbers["Romerías de Cuerpo"] += 1
+            act_dates["Romerías de Cuerpo"] += str(int(act[:2])) + ", "
+        if act[19:] in ["COMP-GEN"]:
+            act_numbers["Competencia general"] += 1
+            act_dates["Competencia general"] += str(int(act[:2])) + ", "
+        if act[19:] in ["EJ-GEN"]:
+            act_numbers["Ejercicio general"] += 1
+            act_dates["Ejercicio general"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-30"]:
+            act_numbers["Incendios"] += 1
+            act_dates["Incendios"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-34", "EJ"]:
+            act_numbers["Ejercicios"] += 1
+            act_dates["Ejercicios"] += str(int(act[:2])) + ", "
+        if act[19:] in ["AC"]:
+            act_numbers["Academias"] += 1
+            act_dates["Academias"] += str(int(act[:2])) + ", "
+        if act[19:] in ["REC", "ROC"]:
+            act_numbers["Sesiones de Compañía"] += 1
+            act_dates["Sesiones de Compañía"] += str(int(act[:2])) + ", "
+        if act[19:] in ["FQ"]:
+            act_numbers["Funerales de Compañía"] += 1
+            act_dates["Funerales de Compañía"] += str(int(act[:2])) + ", "
+        if act[19:] in ["COMP-INT"]:
+            act_numbers["Competencia interna"] += 1
+            act_dates["Competencia interna"] += str(int(act[:2])) + ", "
+        if act[19:] in ["RC"]:
+            act_numbers["Romerías de Compañía"] += 1
+            act_dates["Romerías de Compañía"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-0-1", "10-0-2", "10-0-3", "10-0-4", "10-0-5", "10-0-6", "10-1-1", "10-1-2",
+                        "10-1-3", "10-1-4", "10-1-5", "10-1-6", "10-1-7", "10-1-8", "10-10-1", "10-10-2",
+                        "10-11", "10-13", "10-14", "10-15", "10-16-0", "10-16-5", "10-2", "10-5-1",
+                        "10-5-2", "10-5-3", "10-5-4", "10-5-5", "10-6-1", "10-6-2", "10-6-3", "10-7-1",
+                        "10-7-2", "10-8", "10-17-0", "10-17-1", "10-17-2", "10-17-3", "10-17-4",
+                        "10-17-5", "10-17-6", "10-17-7", "10-17-8", "10-18-0", "10-18-1", "10-18-2", "10-18-3",
+                        "10-18-4", "10-18-5", "10-18-6", "10-18-7", "10-18-8"]:
+            act_numbers["Llamados de Comandancia"] += 1
+            act_dates["Llamados de Comandancia"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-16-3", "10-16-4", "10-3-1", "10-3-2", "10-3-3", "10-3-4", "10-3-5", "10-3-6",
+                        "10-3-7", "10-3-8", "10-3-9", "10-4-1", "10-4-2", "10-4-3"]:
+            act_numbers["Rescates"] += 1
+            act_dates["Rescates"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-12"]:
+            act_numbers["Apoyo a otros cuerpos"] += 1
+            act_dates["Apoyo a otros cuerpos"] += str(int(act[:2])) + ", "
+        if act[19:] in ["JJOO"]:
+            act_numbers["Junta de Oficiales"] += 1
+            act_dates["Junta de Oficiales"] += str(int(act[:2])) + ", "
+        if act[19:] in ["CDis"]:
+            act_numbers["Consejo de Disciplina"] += 1
+            act_dates["Consejo de Disciplina"] += str(int(act[:2])) + ", "
+        if act[19:] in ["10-9"]:
+            act_numbers["Otros servicios"] += 1
+            act_dates["Otros servicios"] += str(int(act[:2])) + ", "
+        if act[19:] in ["ACU"]:
+            act_numbers["Acuartelamiento"] += 1
+            act_dates["Acuartelamiento"] += str(int(act[:2])) + ", "
+        if act[19:] in ["IR"]:
+            act_numbers["Incendios de reserva"] += 1
+            act_dates["Incendios de reserva"] += str(int(act[:2])) + ", "
+        if act[19:] in ["DE"]:
+            act_numbers["Delegaciones"] += 1
+            act_dates["Delegaciones"] += str(int(act[:2])) + ", "
+        if act[19:] in ["EJ-G"]:
+            act_numbers["Ejercicios de guardia"] += 1
+            act_dates["Ejercicios de guardia"] += str(int(act[:2])) + ", "
+        if act[19:] in ["RDC"]:
+            act_numbers["Revisión de cuarteles"] += 1
+            act_dates["Revisión de cuarteles"] += str(int(act[:2])) + ", "
+        if act[19:] in ["C/0-11"]:
+            act_numbers["Clave 0-11"] += 1
+            act_dates["Clave 0-11"] += str(int(act[:2])) + ", "
+    for key, value in act_dates.items():
+        if value != "":
+            act_dates[key] = "(" + value[:-2] + ")"
+    ws["E108"] = act_numbers["Citaciones del Directorio"]
+    ws["E109"] = act_numbers["Funerales de Cuerpo"]
+    ws["E110"] = act_numbers["Romerías de Cuerpo"]
+    ws["E111"] = act_numbers["Competencia general"]
+    ws["E112"] = act_numbers["Ejercicio general"]
+    ws["E117"] = act_numbers["Incendios"]
+    ws["E118"] = act_numbers["Ejercicios"]
+    ws["E119"] = act_numbers["Academias"]
+    ws["E120"] = act_numbers["Sesiones de Compañía"]
+    ws["E121"] = act_numbers["Funerales de Compañía"]
+    ws["E122"] = act_numbers["Competencia interna"]
+    ws["E123"] = act_numbers["Romerías de Compañía"]
+    ws["E128"] = act_numbers["Llamados de Comandancia"]
+    ws["E131"] = act_numbers["Rescates"]
+    ws["E133"] = act_numbers["Apoyo a otros cuerpos"]
+    ws["E134"] = act_numbers["Junta de Oficiales"]
+    ws["E135"] = act_numbers["Consejo de Disciplina"]
+    ws["E136"] = act_numbers["Otros servicios"]
+    ws["E137"] = act_numbers["Acuartelamiento"]
+    ws["E138"] = act_numbers["Incendios de reserva"]
+    ws["E139"] = act_numbers["Delegaciones"]
+    ws["E140"] = act_numbers["Ejercicios de guardia"]
+    ws["E141"] = act_numbers["Revisión de cuarteles"]
+    ws["E142"] = act_numbers["Clave 0-11"]
+    ws["I108"] = act_dates["Citaciones del Directorio"]
+    ws["I109"] = act_dates["Funerales de Cuerpo"]
+    ws["I110"] = act_dates["Romerías de Cuerpo"]
+    ws["I111"] = act_dates["Competencia general"]
+    ws["I112"] = act_dates["Ejercicio general"]
+    ws["I117"] = act_dates["Incendios"]
+    ws["I118"] = act_dates["Ejercicios"]
+    ws["I119"] = act_dates["Academias"]
+    ws["I120"] = act_dates["Sesiones de Compañía"]
+    ws["I121"] = act_dates["Funerales de Compañía"]
+    ws["I122"] = act_dates["Competencia interna"]
+    ws["I123"] = act_dates["Romerías de Compañía"]
+    ws["I128"] = act_dates["Llamados de Comandancia"]
+    ws["I131"] = act_dates["Rescates"]
+    ws["I133"] = act_dates["Apoyo a otros cuerpos"]
+    ws["I134"] = act_dates["Junta de Oficiales"]
+    ws["I135"] = act_dates["Consejo de Disciplina"]
+    ws["I136"] = act_dates["Otros servicios"]
+    ws["I137"] = act_dates["Acuartelamiento"]
+    ws["I138"] = act_dates["Incendios de reserva"]
+    ws["I139"] = act_dates["Delegaciones"]
+    ws["I140"] = act_dates["Ejercicios de guardia"]
+    ws["I141"] = act_dates["Revisión de cuarteles"]
+    ws["I142"] = act_dates["Clave 0-11"]
+    ws["I108"].alignment = openpyxl.styles.Alignment(vertical="center", wrap_text=True)
+    ws["I109"].alignment = openpyxl.styles.Alignment(vertical="center", wrap_text=True)
 
     # Add page breaks
     ws.print_area = "A1:Q200"
