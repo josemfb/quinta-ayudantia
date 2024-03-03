@@ -517,7 +517,19 @@ def generate() -> int:
     ws["L103"].font = openpyxl.styles.Font(bold=True)
     ws["L104"].font = openpyxl.styles.Font(size="22", bold=True)
 
-    # TODO: Add logos
+    # Add logos
+    logo1 = image.Image("logocbs.png")
+    logo2 = image.Image("logocbs.png")
+    logo1.anchor = "B1"
+    logo2.anchor = "B101"
+    factor = logo1.height / 100
+    logo1.height = 100
+    logo1.width = logo1.width / factor
+    factor = logo2.height / 100
+    logo2.height = 100
+    logo2.width = logo2.width / factor
+    ws.add_image(logo1)
+    ws.add_image(logo2)
 
     # Add signature
     ws["I155"].border = openpyxl.styles.Border(top=border_thin)
