@@ -456,23 +456,12 @@ def generate() -> int:
             ws[f"{l}{n+1}"].alignment = openpyxl.styles.Alignment(vertical="center")
 
     # Set columns width
-    ws.column_dimensions["A"].width = 7
-    ws.column_dimensions["B"].width = 5
-    ws.column_dimensions["C"].width = 38
-    ws.column_dimensions["D"].width = 5
-    ws.column_dimensions["E"].width = 5
-    ws.column_dimensions["F"].width = 5
-    ws.column_dimensions["G"].width = 5
-    ws.column_dimensions["H"].width = 5
-    ws.column_dimensions["I"].width = 7
-    ws.column_dimensions["J"].width = 5
-    ws.column_dimensions["K"].width = 38
-    ws.column_dimensions["L"].width = 5
-    ws.column_dimensions["M"].width = 5
-    ws.column_dimensions["N"].width = 5
-    ws.column_dimensions["O"].width = 5
-    ws.column_dimensions["P"].width = 5
-    ws.column_dimensions["Q"].width = 7
+    for col in ["A", "I", "Q"]:
+        ws.column_dimensions[col].width = 15
+    for col in ["B", "D", "E", "F", "G", "H", "J", "L", "M", "N", "O", "P"]:
+        ws.column_dimensions[col].width = 6
+    for col in ["C", "K"]:
+        ws.column_dimensions[col].width = 41
 
     # Add titles
     ws["I4"] = "Parte mensual de asistencia"
@@ -545,13 +534,15 @@ def generate() -> int:
     # TODO: Add act detail
 
     # Add page breaks
-    ws.pageSetUpPr = properties.PageSetupProperties(fitToPage=False, autoPageBreaks=False)
+    # ws.pageSetUpPr = properties.PageSetupProperties(autoPageBreaks=False)
     ws.print_area = "A1:Q200"
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = 1
+    ws.page_setup.fitToHeight = False
     ws.row_breaks.append(pagebreak.Break(100))
     ws.row_breaks.append(pagebreak.Break(200))
     ws.col_breaks.append(pagebreak.Break(17))
-
-    # TODO: Remove auto page breaks
+    ws.pageSetUpPr = properties.PageSetupProperties(autoPageBreaks=False)
 
     # Save simple report
     name = f"Parte{name[6:]}"
