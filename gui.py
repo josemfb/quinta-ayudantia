@@ -5,6 +5,7 @@ import datetime as dt
 from tkinter import filedialog as fd
 import tkcalendar as tkcal
 
+# TODO: Add comments
 
 def resource_path(relative_path):
     try:
@@ -83,6 +84,7 @@ def show_options(options: list, title: str = "", message: str = "") -> str:
     blank.grid(row=0, column=1)
 
     def button_click(txt: str):
+        # TODO: Replace global variable with tkinter text variable
         global to_return
         to_return = txt
         root.destroy()
@@ -135,6 +137,7 @@ def show_menu(options: list, title: str = "", message: str = "") -> str:
     blank.grid(row=0, column=1)
 
     def button_click(opt: int):
+        # TODO: Replace global variable with tkinter text variable
         global to_return
         to_return = opt
         root.destroy()
@@ -161,6 +164,7 @@ def show_menu(options: list, title: str = "", message: str = "") -> str:
 
 def select_act(acts: list, title: str = "", message: str = "", button_text: str = "Continuar") -> str:
     def button_click(date: str, act: str):
+        # TODO: Replace global variable with tkinter text variable
         global to_return
         if act == "No hay más actos con ABH":
             empty_click()
@@ -170,6 +174,7 @@ def select_act(acts: list, title: str = "", message: str = "", button_text: str 
         root.destroy()
 
     def empty_click():
+        # TODO: Replace global variable with tkinter text variable
         global to_return
         to_return = False
         root.destroy()
