@@ -625,7 +625,7 @@ def generate() -> int:
     ws["E143"] = "=SUM(E128:E142)"
     ws["E146"] = "=E113+E124+E143"
 
-    # TODO: Add names and assistance
+    # Add names and assistance
     names = df["Voluntario"].tolist()[4:]
     obgen = df["Ob. Gen."].tolist()[4:]
     obcia = df["Ob. Cía."].tolist()[4:]
@@ -830,6 +830,7 @@ def generate() -> int:
     ws.row_breaks.append(pagebreak.Break(200))
     ws.col_breaks.append(pagebreak.Break(17))
     ws.pageSetUpPr = properties.PageSetupProperties(autoPageBreaks=False)
+    ws.sheet_view.view = "pageBreakPreview"
 
     # Save simple report
     name = f"Parte{name[6:]}"
