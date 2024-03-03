@@ -628,7 +628,7 @@ def generate() -> int:
     ws["B135"] = "Consejo de Disciplina"
     ws["B136"] = "Otros servicios"
     ws["B137"] = "Acuartelamiento"
-    ws["B138"] = "Indencdios de reserva"
+    ws["B138"] = "Incendios de reserva"
     ws["B139"] = "Delegaciones"
     ws["B140"] = "Ejercicios de guardia"
     ws["B141"] = "Revisión de cuarteles"
