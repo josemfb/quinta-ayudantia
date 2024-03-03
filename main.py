@@ -35,6 +35,7 @@ def settings():
     options = ["Revisar listado de actos obligatorios",
                "Modificar último voluntario con premio de 20",
                "Crear nuevo tipo de acto",
+               "Modificar nombre del capitán",
                "Acerca de este programa",
                "Volver al menú principal"]
 
@@ -50,11 +51,14 @@ def settings():
                 # TODO - Review and create new types of acts
                 gui.show_message(title="ERROR", message="Función aún no implementada")
             case 3:
+                # TODO - Change captain name
+                gui.show_message(title="ERROR", message="Función aún no implementada")
+                return 0
+            case 4:
                 msg = ("Automatizador de tareas de la ayudantía.                                                     \n"
                        "Creado por José Fernández B. (jose.fernandez@5.cbs.cl)")
                 gui.show_message(title="Acerca de", message=msg)
-                return 0
-            case 4:
+            case 5:
                 return 0
             case _:
                 return 1
