@@ -450,10 +450,10 @@ def generate() -> int:
     ws = wb.active
 
     # Set white background and vertical center alignment
-    for l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]:
+    for col in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]:
         for n in range(200):
-            ws[f"{l}{n+1}"].fill = openpyxl.styles.PatternFill("solid", fgColor="FFFFFF")
-            ws[f"{l}{n+1}"].alignment = openpyxl.styles.Alignment(vertical="center")
+            ws[f"{col}{n+1}"].fill = openpyxl.styles.PatternFill("solid", fgColor="FFFFFF")
+            ws[f"{col}{n+1}"].alignment = openpyxl.styles.Alignment(vertical="center")
 
     # Set columns width
     for col in ["A", "I", "Q"]:
@@ -615,7 +615,7 @@ def generate() -> int:
         for row in [109, 111, 118, 120, 122, 131, 134, 136, 138, 140, 142]:
             ws[f"{col}{row}"].fill = openpyxl.styles.PatternFill("solid", fgColor="E2EFDA")
     for col in ["B", "C", "D", "E", "F", "G", "H"]:
-            ws[f"{col}146"].fill = openpyxl.styles.PatternFill("solid", fgColor="A9D08E")
+        ws[f"{col}146"].fill = openpyxl.styles.PatternFill("solid", fgColor="A9D08E")
     for row in list(range(108, 114)) + list(range(117, 125)) + list(range(128, 144)) + [146]:
         ws[f"E{row}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
     for row in [113, 124, 143, 146]:
@@ -625,7 +625,119 @@ def generate() -> int:
     ws["E143"] = "=SUM(E128:E142)"
     ws["E146"] = "=E113+E124+E143"
 
-    # TODO: Add names
+    # TODO: Add names and assistance
+    names = df["Voluntario"].tolist()[4:]
+    obgen = df["Ob. Gen."].tolist()[4:]
+    obcia = df["Ob. Cía."].tolist()[4:]
+    ab = df["Ab."].tolist()[4:]
+    dict_obgen = {names[i]: obgen[i] for i in range(len(names))}
+    dict_obcia = {names[i]: obcia[i] for i in range(len(names))}
+    dict_ab = {names[i]: ab[i] for i in range(len(names))}
+    names = sorted(names, key=str.casefold)
+    if len(names) > 90:
+        for i in range(90):
+            ws[f"B{i + 10}"] = i + 1
+            ws[f"B{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"C{i + 10}"] = names[i]
+            ws[f"D{i + 10}"] = dict_obgen[names[i]]
+            ws[f"D{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"E{i + 10}"] = dict_obcia[names[i]]
+            ws[f"E{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"F{i + 10}"] = dict_ab[names[i]]
+            ws[f"F{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"G{i + 10}"] = 0
+            ws[f"G{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"H{i + 10}"] = f"=D{i + 10}+E{i + 10}+F{i + 10}+G{i + 10}"
+            ws[f"H{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"H{i + 10}"].font = openpyxl.styles.Font(bold=True)
+            if (i + 10) % 2 == 1:
+                for col in ["B", "C", "D", "E", "F", "G", "H"]:
+                    ws[f"{col}{i + 10}"].fill = openpyxl.styles.PatternFill("solid", fgColor="E2EFDA")
+            ws[f"B{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"C{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"D{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thin)
+            ws[f"E{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"F{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"G{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thick)
+            ws[f"H{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+        for i in range(90, len(names)):
+            ws[f"J{i - 80}"] = i + 1
+            ws[f"J{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"K{i - 80}"] = names[i]
+            ws[f"L{i - 80}"] = dict_obgen[names[i]]
+            ws[f"L{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"M{i - 80}"] = dict_obcia[names[i]]
+            ws[f"M{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"N{i - 80}"] = dict_ab[names[i]]
+            ws[f"N{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"O{i - 80}"] = 0
+            ws[f"O{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"P{i - 80}"] = f"=L{i - 80}+M{i - 80}+N{i - 80}+O{i - 80}"
+            ws[f"P{i - 80}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"P{i - 80}"].font = openpyxl.styles.Font(bold=True)
+            if (i - 80) % 2 == 1:
+                for col in ["J", "K", "L", "M", "N", "O", "P"]:
+                    ws[f"{col}{i - 80}"].fill = openpyxl.styles.PatternFill("solid", fgColor="E2EFDA")
+            ws[f"J{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"K{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"L{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thin)
+            ws[f"M{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"N{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"O{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thick)
+            ws[f"P{i - 80}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+        for col in ["B", "C", "D", "E", "F", "G", "H"]:
+            ws[f"{col}{100}"].border = openpyxl.styles.Border(top=border_thick)
+        for col in ["J", "K", "L", "M", "N", "O", "P"]:
+            ws[f"{col}{len(names)-80}"].border = openpyxl.styles.Border(top=border_thick)
+    else:
+        for i in range(len(names)):
+            ws[f"B{i + 10}"] = i + 1
+            ws[f"B{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"C{i + 10}"] = names[i]
+            ws[f"D{i + 10}"] = dict_obgen[names[i]]
+            ws[f"D{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"E{i + 10}"] = dict_obcia[names[i]]
+            ws[f"E{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"F{i + 10}"] = dict_ab[names[i]]
+            ws[f"F{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"G{i + 10}"] = 0
+            ws[f"G{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"H{i + 10}"] = f"=D{i + 10}+E{i + 10}+F{i + 10}+G{i + 10}"
+            ws[f"H{i + 10}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+            ws[f"H{i + 10}"].font = openpyxl.styles.Font(bold=True)
+            if (i + 10) % 2 == 1:
+                for col in ["B", "C", "D", "E", "F", "G", "H"]:
+                    ws[f"{col}{i + 10}"].fill = openpyxl.styles.PatternFill("solid", fgColor="E2EFDA")
+            ws[f"B{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"C{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+            ws[f"D{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thin)
+            ws[f"E{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"F{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thin)
+            ws[f"G{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thin, right=border_thick)
+            ws[f"H{i + 10}"].border = openpyxl.styles.Border(top=border_thin, bottom=border_thin,
+                                                             left=border_thick, right=border_thick)
+        for col in ["B", "C", "D", "E", "F", "G", "H"]:
+            ws[f"{col}{len(names)+1}"].border = openpyxl.styles.Border(top=border_thick)
 
     # Add headers
     for col in ["B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P"]:
@@ -704,10 +816,6 @@ def generate() -> int:
     ws[f"P7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thick)
     ws[f"P8"].border = openpyxl.styles.Border(right=border_thick)
     ws[f"P9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
-
-    # TODO: Color headers and lines
-
-    # TODO: Add assistance
 
     # TODO: Add act counts
 
