@@ -449,7 +449,7 @@ def generate() -> int:
     wb = openpyxl.Workbook()
     ws = wb.active
 
-    # TODO: Set white background and vertical center alignment
+    # Set white background and vertical center alignment
     for l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]:
         for n in range(200):
             ws[f"{l}{n+1}"].fill = openpyxl.styles.PatternFill("solid", fgColor="FFFFFF")
@@ -474,6 +474,7 @@ def generate() -> int:
 
     # Add company number
     border_thick = openpyxl.styles.Side(border_style="thick", color="000000")
+    border_thin = openpyxl.styles.Side(border_style="thin", color="000000")
     ws.merge_cells("L3:P3")
     ws.merge_cells("L4:P5")
     ws["L3"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
@@ -519,7 +520,110 @@ def generate() -> int:
 
     # TODO: Add signature
 
-    # TODO: Create blank tables and color them
+    # Create blank tables and color them
+    for row in [107, 116, 127]:
+        ws.merge_cells(f"B{row}:P{row}")
+    for row in list(range(108, 114)) + list(range(117, 125)) + list(range(128, 144)):
+        ws.merge_cells(f"B{row}:D{row}")
+        ws.merge_cells(f"E{row}:H{row}")
+        ws.merge_cells(f"I{row}:P{row}")
+        for col in ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]:
+            ws[f"{col}{row}"].border = openpyxl.styles.Border(bottom=border_thin)
+        ws[f"E{row}"].border = openpyxl.styles.Border(left=border_thin, bottom=border_thin)
+        ws[f"H{row}"].border = openpyxl.styles.Border(right=border_thin, bottom=border_thin)
+        ws[f"I{row}"].border = openpyxl.styles.Border(left=border_thin, bottom=border_thin)
+    ws.unmerge_cells(f"B128:D128")
+    ws.unmerge_cells(f"B129:D129")
+    ws.unmerge_cells(f"B130:D130")
+    ws.merge_cells(f"B128:D130")
+    ws.unmerge_cells(f"E128:H128")
+    ws.unmerge_cells(f"E129:H129")
+    ws.unmerge_cells(f"E130:H130")
+    ws.merge_cells(f"E128:H130")
+    ws.unmerge_cells(f"I128:P128")
+    ws.unmerge_cells(f"I129:P129")
+    ws.unmerge_cells(f"I130:P130")
+    ws.merge_cells(f"I128:P130")
+    ws.unmerge_cells(f"B131:D131")
+    ws.unmerge_cells(f"B132:D132")
+    ws.merge_cells(f"B131:D132")
+    ws.unmerge_cells(f"E131:H131")
+    ws.unmerge_cells(f"E132:H132")
+    ws.merge_cells(f"E131:H132")
+    ws.unmerge_cells(f"I131:P131")
+    ws.unmerge_cells(f"I132:P132")
+    ws.merge_cells(f"I131:P132")
+    for n in list(range(107, 114)) + list(range(116, 125)) + list(range(127, 144)):
+        ws[f"A{n}"].border = openpyxl.styles.Border(right=border_thick)
+        ws[f"Q{n}"].border = openpyxl.styles.Border(left=border_thick)
+    for col in ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]:
+        for row in [107, 113, 116, 124, 127, 143]:
+            ws[f"{col}{row}"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick)
+    for n in [113, 124, 143]:
+        ws[f"E{n}"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, left=border_thin)
+        ws[f"H{n}"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, right=border_thin)
+    ws["B146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, left=border_thick)
+    ws["C146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick)
+    ws["D146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, right=border_thin)
+    ws["E146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, left=border_thin)
+    ws["F146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick)
+    ws["G146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick)
+    ws["H146"].border = openpyxl.styles.Border(top=border_thick, bottom=border_thick, right=border_thick)
+    ws.merge_cells("B146:D146")
+    ws.merge_cells("E146:H146")
+    ws["B107"] = "Obligatorios generales"
+    ws["B116"] = "Obligatorios de Compañía"
+    ws["B127"] = "Abonos"
+    ws["B107"].font = openpyxl.styles.Font(bold=True)
+    ws["B116"].font = openpyxl.styles.Font(bold=True)
+    ws["B127"].font = openpyxl.styles.Font(bold=True)
+    ws["B108"] = "Citaciones del Directorio"
+    ws["B109"] = "Funerales"
+    ws["B110"] = "Romerías"
+    ws["B111"] = "Competencia general"
+    ws["B112"] = "Ejercicio general"
+    ws["B117"] = "Incendios"
+    ws["B118"] = "Ejercicios"
+    ws["B119"] = "Academias"
+    ws["B120"] = "Reuniones"
+    ws["B121"] = "Funerales"
+    ws["B122"] = "Competencia interna"
+    ws["B123"] = "Romerías"
+    ws["B128"] = "Llamados de Comandancia"
+    ws["B131"] = "Rescates"
+    ws["B133"] = "Apoyo a otros cuerpos"
+    ws["B134"] = "Junta de Oficiales"
+    ws["B135"] = "Consejo de Disciplina"
+    ws["B136"] = "Otros servicios"
+    ws["B137"] = "Acuartelamiento"
+    ws["B138"] = "Indencdios de reserva"
+    ws["B139"] = "Delegaciones"
+    ws["B140"] = "Ejercicios de guardia"
+    ws["B141"] = "Revisión de cuarteles"
+    ws["B142"] = "Clave 0-11"
+    ws["B113"] = "Subtotal"
+    ws["B124"] = "Subtotal"
+    ws["B143"] = "Subtotal"
+    ws["B113"].font = openpyxl.styles.Font(bold=True)
+    ws["B124"].font = openpyxl.styles.Font(bold=True)
+    ws["B143"].font = openpyxl.styles.Font(bold=True)
+    ws["B146"] = "Total general"
+    ws["B146"].font = openpyxl.styles.Font(bold=True)
+    for col in ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]:
+        for row in [107, 113, 116, 124, 127, 143]:
+            ws[f"{col}{row}"].fill = openpyxl.styles.PatternFill("solid", fgColor="A9D08E")
+        for row in [109, 111, 118, 120, 122, 131, 134, 136, 138, 140, 142]:
+            ws[f"{col}{row}"].fill = openpyxl.styles.PatternFill("solid", fgColor="E2EFDA")
+    for col in ["B", "C", "D", "E", "F", "G", "H"]:
+            ws[f"{col}146"].fill = openpyxl.styles.PatternFill("solid", fgColor="A9D08E")
+    for row in list(range(108, 114)) + list(range(117, 125)) + list(range(128, 144)) + [146]:
+        ws[f"E{row}"].alignment = openpyxl.styles.Alignment(vertical="center", horizontal="center")
+    for row in [113, 124, 143, 146]:
+        ws[f"E{row}"].font = openpyxl.styles.Font(bold=True)
+    ws["E113"] = "=SUM(E108:E112)"
+    ws["E124"] = "=SUM(E117:E123)"
+    ws["E143"] = "=SUM(E128:E142)"
+    ws["E146"] = "=E113+E124+E143"
 
     # TODO: Add names
 
