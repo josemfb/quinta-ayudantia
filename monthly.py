@@ -627,7 +627,83 @@ def generate() -> int:
 
     # TODO: Add names
 
-    # TODO: Add headers
+    # Add headers
+    for col in ["B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P"]:
+        ws.merge_cells(f"{col}7:{col}9")
+        ws[f"{col}7"].fill = openpyxl.styles.PatternFill("solid", fgColor="A9D08E")
+        ws[f"{col}7"].font = openpyxl.styles.Font(bold=True)
+        if col in ["D", "E", "F", "G", "L", "M", "N", "O"]:
+            ws[f"{col}7"].font = openpyxl.styles.Font(size=10, bold=True)
+    ws["B7"] = "N.º"
+    ws["B7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center")
+    ws["C7"] = "Voluntario"
+    ws["C7"].alignment = openpyxl.styles.Alignment(vertical="bottom")
+    ws["D7"] = "Ob. Gen."
+    ws["D7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["E7"] = "Ob. Cía."
+    ws["E7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["F7"] = "Abonos"
+    ws["F7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["G7"] = "Otros Ab."
+    ws["G7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["H7"] = "Total"
+    ws["H7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["J7"] = "N.º"
+    ws["J7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center")
+    ws["K7"] = "Voluntario"
+    ws["K7"].alignment = openpyxl.styles.Alignment(vertical="bottom")
+    ws["L7"] = "Ob. Gen."
+    ws["L7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["M7"] = "Ob. Cía."
+    ws["M7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["N7"] = "Abonos"
+    ws["N7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["O7"] = "Otros Ab."
+    ws["O7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws["P7"] = "Total"
+    ws["P7"].alignment = openpyxl.styles.Alignment(vertical="bottom", horizontal="center", textRotation=90)
+    ws[f"B7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
+    ws[f"B8"].border = openpyxl.styles.Border(left=border_thick, right=border_thick)
+    ws[f"B9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
+    ws[f"C7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thick)
+    ws[f"C8"].border = openpyxl.styles.Border(left=border_thick, right=border_thick)
+    ws[f"C9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
+    ws[f"D7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thin)
+    ws[f"D8"].border = openpyxl.styles.Border(left=border_thick, right=border_thin)
+    ws[f"D9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thin)
+    ws[f"E7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thin)
+    ws[f"E8"].border = openpyxl.styles.Border(left=border_thin, right=border_thin)
+    ws[f"E9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thin)
+    ws[f"F7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thin)
+    ws[f"F8"].border = openpyxl.styles.Border(left=border_thin, right=border_thin)
+    ws[f"F9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thin)
+    ws[f"G7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thick)
+    ws[f"G8"].border = openpyxl.styles.Border(left=border_thin, right=border_thick)
+    ws[f"G9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thick)
+    ws[f"H7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thick)
+    ws[f"H8"].border = openpyxl.styles.Border(right=border_thick)
+    ws[f"H9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
+    ws[f"J7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick)
+    ws[f"J8"].border = openpyxl.styles.Border(left=border_thick, right=border_thick)
+    ws[f"J9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick)
+    ws[f"K7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thick)
+    ws[f"K8"].border = openpyxl.styles.Border(left=border_thick, right=border_thick)
+    ws[f"K9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
+    ws[f"L7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thin)
+    ws[f"L8"].border = openpyxl.styles.Border(left=border_thick, right=border_thin)
+    ws[f"L9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thin)
+    ws[f"M7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thin)
+    ws[f"M8"].border = openpyxl.styles.Border(left=border_thin, right=border_thin)
+    ws[f"M9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thin)
+    ws[f"N7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thin)
+    ws[f"N8"].border = openpyxl.styles.Border(left=border_thin, right=border_thin)
+    ws[f"N9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thin)
+    ws[f"O7"].border = openpyxl.styles.Border(top=border_thick, left=border_thin, right=border_thick)
+    ws[f"O8"].border = openpyxl.styles.Border(left=border_thin, right=border_thick)
+    ws[f"O9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thin, right=border_thick)
+    ws[f"P7"].border = openpyxl.styles.Border(top=border_thick, left=border_thick, right=border_thick)
+    ws[f"P8"].border = openpyxl.styles.Border(right=border_thick)
+    ws[f"P9"].border = openpyxl.styles.Border(bottom=border_thick, left=border_thick, right=border_thick)
 
     # TODO: Color headers and lines
 
@@ -638,7 +714,6 @@ def generate() -> int:
     # TODO: Add act detail
 
     # Add page breaks
-    # ws.pageSetUpPr = properties.PageSetupProperties(autoPageBreaks=False)
     ws.print_area = "A1:Q200"
     ws.page_setup.fitToPage = True
     ws.page_setup.fitToWidth = 1
