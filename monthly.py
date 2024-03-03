@@ -528,7 +528,7 @@ def generate() -> int:
 
     # TODO: Add logos
 
-    # TODO: signature
+    # TODO: Add signature
 
     # TODO: Create blank tables and color them
 
