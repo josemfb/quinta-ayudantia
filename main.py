@@ -1,4 +1,5 @@
-# pyinstaller -F -w -n "ayudantia" --add-data "logo.png:." --exclude-module "config.py" main.py
+# pyinstaller -F -w -n "ayudantia" --add-data "logo.png:." --add-data "logocbs.png:."
+# --add-data "stamp.png:." --exclude-module "config.py" main.py
 
 import locale
 import sys
