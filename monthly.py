@@ -4,6 +4,7 @@ import os
 
 import openpyxl
 import openpyxl.styles
+import openpyxl.drawing.image as image
 import openpyxl.worksheet.pagebreak as pagebreak
 import openpyxl.worksheet.properties as properties
 import pandas as pd
@@ -518,7 +519,26 @@ def generate() -> int:
 
     # TODO: Add logos
 
-    # TODO: Add signature
+    # Add signature
+    ws["I155"].border = openpyxl.styles.Border(top=border_thin)
+    ws["J155"].border = openpyxl.styles.Border(top=border_thin)
+    ws.merge_cells("I155:J155")
+    ws.merge_cells("I156:J156")
+    ws["I155"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
+    ws["I156"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
+    ws["I155"] = config.captain_name
+    ws["I156"] = "Capitán"
+    signature = image.Image("firma.png")
+    signature.anchor = "I150"
+    factor = signature.height / 90
+    signature.height = 90
+    signature.width = signature.width / factor
+    ws.add_image(signature)
+    stamp  = image.Image("stamp.png")
+    stamp.anchor = "K152"
+    stamp.height = 90
+    stamp.width = 90
+    ws.add_image(stamp)
 
     # Create blank tables and color them
     for row in [107, 116, 127]:
