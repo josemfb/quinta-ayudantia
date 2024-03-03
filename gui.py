@@ -17,6 +17,7 @@ def resource_path(relative_path):
 
 
 def get_file() -> str:
+    # TODO: Open by default in current location
     filetypes = (('Excel files', '*.xls'), ('HTML files', '*.html'), ('All files', '*.*'))
     file = fd.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
     return file
