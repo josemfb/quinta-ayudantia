@@ -1008,6 +1008,8 @@ def generate() -> int:
     # Remove original file after finishing
     os.remove(file)
 
+    gui.show_message(title="Éxito", message="Se han generado correctamente el cuadro y el parte",
+                     button_text="Salir")
     return 0
 
 
