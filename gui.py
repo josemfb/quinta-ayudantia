@@ -168,7 +168,7 @@ def select_act(acts: list, title: str = "", message: str = "", button_text: str 
         global to_return
         if act == "No hay más actos con ABH":
             empty_click()
-        to_return = f"{date}  {act}  {abh.get():02}"
+        to_return = f"{date}  {act}  {int(abh.get()):02}"
         if act == "No hay más actos con ABH":
             to_return = False
         root.destroy()

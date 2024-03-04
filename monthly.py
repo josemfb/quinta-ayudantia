@@ -8,6 +8,7 @@ import openpyxl.drawing.image as image
 import openpyxl.worksheet.pagebreak as pagebreak
 import openpyxl.worksheet.properties as properties
 import pandas as pd
+import babel.numbers
 
 import config
 import gui
@@ -512,8 +513,8 @@ def generate() -> int:
     ws["L104"].font = openpyxl.styles.Font(size="22", bold=True)
 
     # Add logos
-    logo1 = image.Image("logocbs.png")
-    logo2 = image.Image("logocbs.png")
+    logo1 = image.Image(gui.resource_path("logocbs.png"))
+    logo2 = image.Image(gui.resource_path("logocbs.png"))
     logo1.anchor = "B1"
     logo2.anchor = "B101"
     factor = logo1.height / 100
@@ -540,7 +541,7 @@ def generate() -> int:
     signature.height = 90
     signature.width = signature.width / factor
     ws.add_image(signature)
-    stamp  = image.Image("stamp.png")
+    stamp  = image.Image(gui.resource_path("stamp.png"))
     stamp.anchor = "K152"
     stamp.height = 90
     stamp.width = 90
