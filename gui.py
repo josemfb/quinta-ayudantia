@@ -212,7 +212,9 @@ def select_act(acts: list, title: str = "", message: str = "", button_text: str 
                                     font=("Vollkorn SC", 10), month=int(today.strftime("%m")) - 1, day=1)
     act = tk.StringVar(root)
     act.set("No hay más actos con ABH")
+
     # TODO: start with acts displayed for the 1st of the month
+
     options = tk.OptionMenu(root, act, act.get())
     abh = tk.StringVar(root)
     abh.set("0")
